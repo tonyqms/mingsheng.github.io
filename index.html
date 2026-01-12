@@ -255,6 +255,33 @@
             margin-top: 3rem;
         }
 
+        /* Blog Filters */
+        .blog-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 25px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
         .blog-card {
             background: var(--bg-card);
             border-radius: 15px;
@@ -264,12 +291,6 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-        }
-
-        .blog-card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
         }
 
         .blog-card::before {
@@ -608,17 +629,26 @@
 
     <section id="blog">
         <h2>Blog</h2>
+        
+        <!-- Category Filter -->
+        <div class="blog-filters">
+            <button class="filter-btn active" data-category="all">All Posts</button>
+            <button class="filter-btn" data-category="business">Business Thinking</button>
+            <button class="filter-btn" data-category="career">Career Insights</button>
+            <button class="filter-btn" data-category="technical">Technical Deep-Dive</button>
+        </div>
+
         <div class="blog-grid">
-            <a href="./blog-reproducible-pipelines.html" class="blog-card-link">
+            <a href="./blog-reproducible-pipelines.html" class="blog-card-link" data-category="business" data-date="2026-01-15">
                 <div class="blog-card">
                     <span class="blog-category">Business Thinking</span>
                     <h3>The ROI of Reproducible Pipelines</h3>
                     <p>Why investing in automated, version-controlled workflows isn't just good science—it's good business. How reproducibility drives efficiency and stakeholder trust.</p>
-                    <span class="blog-date">January 15, 2025</span>
+                    <span class="blog-date">January 15, 2026</span>
                 </div>
             </a>
             
-            <a href="./blog-bench-to-cloud.html" class="blog-card-link">
+            <a href="./blog-bench-to-cloud.html" class="blog-card-link" data-category="career" data-date="2024-03-22">
                 <div class="blog-card">
                     <span class="blog-category">Career Insights</span>
                     <h3>From Bench to Cloud: Navigating the Bioinformatics Career Path</h3>
@@ -627,7 +657,7 @@
                 </div>
             </a>
             
-            <a href="./blog-skim-seq.html" class="blog-card-link">
+            <a href="./blog-skim-seq.html" class="blog-card-link" data-category="technical" data-date="2024-08-10">
                 <div class="blog-card">
                     <span class="blog-category">Technical Deep-Dive</span>
                     <h3>Skim-Seq + Imputation: Cost-Effective Genotyping at Scale</h3>
@@ -636,7 +666,7 @@
                 </div>
             </a>
             
-            <a href="./blog-scientific-services.html" class="blog-card-link">
+            <a href="./blog-scientific-services.html" class="blog-card-link" data-category="business" data-date="2024-11-05">
                 <div class="blog-card">
                     <span class="blog-category">Business Thinking</span>
                     <h3>Building Scientific Services That Scale</h3>
@@ -645,7 +675,7 @@
                 </div>
             </a>
             
-            <a href="./blog-communication.html" class="blog-card-link">
+            <a href="./blog-communication.html" class="blog-card-link" data-category="career" data-date="2025-02-18">
                 <div class="blog-card">
                     <span class="blog-category">Career Insights</span>
                     <h3>The Art of Cross-Functional Communication</h3>
@@ -654,7 +684,7 @@
                 </div>
             </a>
             
-            <a href="./blog-kpis.html" class="blog-card-link">
+            <a href="./blog-kpis.html" class="blog-card-link" data-category="technical" data-date="2025-06-12">
                 <div class="blog-card">
                     <span class="blog-category">Technical Deep-Dive</span>
                     <h3>Designing KPIs for Genomics Operations</h3>
@@ -809,8 +839,7 @@
                 <div class="coffee-section">
                     <h3 style="margin-bottom: 1rem;">☕ Support My Content</h3>
                     <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">If you find my blog posts and insights valuable, consider buying me a coffee!</p>
-                    <a href="https://ko-fi.com/mingshengqi" target="_blank" class="coffee-btn">Buy Me a Coffee</a>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">Your support helps me create more free content about bioinformatics, career advice, and technical insights!</p>
+                    <a href="#" class="coffee-btn">Buy Me a Coffee</a>
                 </div>
             </div>
         </div>
@@ -839,4 +868,57 @@
             this.reset();
         });
 
-        // Intersection
+        // Blog Category Filter
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const blogCards = document.querySelectorAll('.blog-card-link');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const category = this.getAttribute('data-category');
+
+                blogCards.forEach(card => {
+                    if (category === 'all') {
+                        card.classList.remove('hidden');
+                        setTimeout(() => card.style.display = 'block', 10);
+                    } else {
+                        const cardCategory = card.getAttribute('data-category');
+                        if (cardCategory === category) {
+                            card.classList.remove('hidden');
+                            setTimeout(() => card.style.display = 'block', 10);
+                        } else {
+                            card.style.display = 'none';
+                            card.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe blog cards and portfolio items
+        document.querySelectorAll('.blog-card, .project-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
